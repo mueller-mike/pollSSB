@@ -1,81 +1,27 @@
-# tinySSB - the LoRa descendant of Secure Scuttlebutt
+# pollSSB -- based on tinySSB
 
-![tinySSB logo](doc/_img/tinySSB-banner.png)
+## Overview
+The project tinySSB (Tiny Secure Scuttlebutt) is a minimal, experimental version of the Scuttlebutt protocol designed for constrained environments such as embedded devices. PollSSB extends tinySSB by adding structured voting mechanisms, enabling users to propose polls and cast votes, all while preserving the append-only, gossip-based, and cryptographically secure nature of the underlying protocol.
 
-tinySSB is a variation of Secure Scuttlebutt (SSB)
-[https://scuttlebutt.nz/](https://scuttlebutt.nz/), a radically
-decentral approach of implementing distributed applications. In a
-nutshell, with SSB we get "social media without servers".  tinySSB
-enabes the same, but is able to work in constraint environments thanks
-to its minuscule packet size of 120B.
+## Objectives
+- Enable decentralized polling functionality over tinySSB.
+- Ensure tamper-proof vote recording through append-only logs.
+- Maintain low resource usage and compatibility with embedded systems.
+- Preserve the core principles of tinySSB: no global state, no central server, and local-first data handling.
 
-## How it works
+## Features
+- Poll Creation: Users can create a poll message in a chat with a title, description, and set of options.
+- Integrity: All votes are cryptographically signed and timestamped.
+- Vote Counting: Nodes independently compute results by traversing the log.
+- Offline-first: Works in disconnected environments; votes sync when peers come online.
+- Voting: Participants can vote by appending a vote message referencing the poll and their chosen option.
 
-The core of SSB are single-author append-only logs that are replicated
-at will and on a best-effort basis. Eventually, all updates to a log
-will reach the interested parties who can verify the authenticity and
-integrity of each update.  This also applies to auxiliary forwarders,
-making any SSB-aware entity a potential link in the forwarding chains.
-Any means of replication is fine, which can be BlueTooth Low Energy,
-Internet protocols, USB sticks, or data printed on paper, collected
-and dispatched centrally or simply using a gossip protocol: anything
-goes!
+## Authors
+This project is developed as part of a course on internet and distributed systems at university basel. Contributors include:
+- Gioia Almer
+- Yanick Spichty
+- Max Reinert
+- Mike Müller
 
-Each append-only log is a trivial _Conflict-free Replicated Data Type_
-(CRDT). A set of append-only logs also of a CRDT. CRDTs are best
-understood as virtual (because distributed) data where a local site
-keeps a copy and can act on this copy. CRDTs are designed such that
-any local modification results in update messages sent to the other
-replicas: if these updates are ingested correctly, all replicas will
-converge to the same shared state, without any central entity having
-to intervene or help. Writing distributed applications as and with
-CRDTs requires careful design but has a huge reward in unbounded
-scallability, in applications that continue to work when the device is
-offline because all updates seamlessly merge into the other replicas
-when the device reconnects. Go decentral!
-
-
-## The difference between SSB and tinySSB
-
-tinySSB inherits the core concepts of classic SSB i.e., the
-append-only logs with signed entries, the encryption suite etc.  The
-novelty of tinySSB lies in its
-
-- binary packet format (instead of JSON)
-- “shadow packet headers” that avoid sending and storing redundant data
-- the absence of “blobs” outside the append-only logs, using side chains instead
-- a very simple and connectionless replication protocol.
-
-The data packet format has been made extremely small, namely 120
-Bytes.  The point is to enable the use of tinySSB in challenged
-environments where bandwidth and storage resources are scarce.
-
-tinySSB runs over Bluetooth Low Energy (BLE), over long-range radio
-(LoRA), and perhaps in the future even over shortwave in the amateur
-radio bands, bouncing off the ionosphere. Embedded devices are
-powerful enough to handle these packets and serve well as cheap
-forwarders.
-
-At the higher level, the design of distributed applications over
-tinySSB as well as SSB is identical - it's a CRDT world.
-
-tinySSB is used for teaching distributed programming concepts and
-skills at the Computer Science Bachelor and Masters level at the
-University of Basel.
-
-
-## tinySSB Tech Gallery
-
-(see the respective folders)
-
-- Android
-- ESP32
-
-
-
-## Documentation
-
-- 16 factsheets made for the [dWeb camp 2024](https://dwebcamp.org/), Aug 2024: [PDF](doc/tinySSB-factsheets-v2b.pdf)
-- talk for the Swiss Radio Amateur Assoc, Emergency Communication Convention, Oct 2024: [PDF](doc/20241019-USKA-emcomm-tinySSB.pdf)
-
----
+## License
+This project is licensed under the MIT License.
